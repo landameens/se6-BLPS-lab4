@@ -10,12 +10,8 @@
         <bpmn:flowNodeRef>Gateway_00fa4rw</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1sa8dxk</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_0uxythg</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Gateway_0gkso0r</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1piblb1</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_0u0yz3g</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Gateway_1y6hduq</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_164kvl8</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_1ffblv3</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Choose_film</bpmn:flowNodeRef>
       </bpmn:lane>
@@ -26,14 +22,14 @@
         <bpmn:flowNodeRef>Get_playlist_activity</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:userTask id="Choose_playlist" name="выбор подборки" camunda:formRef="Form_02g924q" camunda:formRefBinding="deployment">
+    <bpmn:userTask id="Choose_playlist" name="выбор подборки" camunda:formRef="Form_choose_playlist" camunda:formRefBinding="latest">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="playlists">
             <camunda:list />
           </camunda:inputParameter>
-          <camunda:outputParameter name="playlist_id">$playlist_id}</camunda:outputParameter>
-          <camunda:outputParameter name="is_removing">${}</camunda:outputParameter>
+          <camunda:outputParameter name="playlist_id">${playlist_id}</camunda:outputParameter>
+          <camunda:outputParameter name="is_removing">${is_removing}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ca8aqd</bpmn:incoming>
@@ -53,35 +49,17 @@
       <bpmn:outgoing>Flow_15vfm13</bpmn:outgoing>
     </bpmn:task>
     <bpmn:dataStoreReference id="DataStoreReference_1pugje6" />
-    <bpmn:exclusiveGateway id="Gateway_0gkso0r" name="успешно">
-      <bpmn:incoming>Flow_1j7f0ia</bpmn:incoming>
-      <bpmn:outgoing>Flow_15a2he4</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1r79ab0</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:endEvent id="Event_1piblb1">
-      <bpmn:incoming>Flow_15a2he4</bpmn:incoming>
+      <bpmn:incoming>Flow_1j7f0ia</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="Event_0u0yz3g">
-      <bpmn:incoming>Flow_1r79ab0</bpmn:incoming>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_12x1tqb" />
-    </bpmn:endEvent>
-    <bpmn:exclusiveGateway id="Gateway_1y6hduq" name="успешно">
-      <bpmn:incoming>Flow_11zlbr4</bpmn:incoming>
-      <bpmn:outgoing>Flow_1jjdktp</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0ss6u63</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:endEvent id="Event_164kvl8">
-      <bpmn:incoming>Flow_0ss6u63</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:endEvent id="Event_1ffblv3">
-      <bpmn:incoming>Flow_1jjdktp</bpmn:incoming>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_0ub5ykd" />
+      <bpmn:incoming>Flow_11zlbr4</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:dataStoreReference id="DataStoreReference_08ul4vy" />
     <bpmn:serviceTask id="Remove_film" name="удалить фильм из подборки" camunda:delegateExpression="${removeFilmDelegate}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="is_success" />
+          <camunda:outputParameter name="is_success">true</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1tuy7jc</bpmn:incoming>
@@ -93,7 +71,7 @@
     <bpmn:serviceTask id="Activity_1j07ij4" name="добавить фильм в подборку" camunda:delegateExpression="${addFilmDelegate}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="is_success" />
+          <camunda:outputParameter name="is_success">true</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_15vfm13</bpmn:incoming>
@@ -143,7 +121,9 @@
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="films">
-            <camunda:list />
+            <camunda:list>
+              <camunda:value>defgh</camunda:value>
+            </camunda:list>
           </camunda:inputParameter>
           <camunda:outputParameter name="film_id">${film_id}</camunda:outputParameter>
         </camunda:inputOutput>
@@ -151,27 +131,15 @@
       <bpmn:incoming>Flow_1sv1q72</bpmn:incoming>
       <bpmn:outgoing>Flow_1dkacqx</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_0ss6u63" sourceRef="Gateway_1y6hduq" targetRef="Event_164kvl8">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_success==true}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1jjdktp" sourceRef="Gateway_1y6hduq" targetRef="Event_1ffblv3">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_success==false}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_11zlbr4" sourceRef="Activity_1j07ij4" targetRef="Gateway_1y6hduq" />
-    <bpmn:sequenceFlow id="Flow_1r79ab0" sourceRef="Gateway_0gkso0r" targetRef="Event_0u0yz3g">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_success==false}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_15a2he4" sourceRef="Gateway_0gkso0r" targetRef="Event_1piblb1">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_success==true}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1j7f0ia" sourceRef="Remove_film" targetRef="Gateway_0gkso0r" />
+    <bpmn:sequenceFlow id="Flow_11zlbr4" sourceRef="Activity_1j07ij4" targetRef="Event_164kvl8" />
+    <bpmn:sequenceFlow id="Flow_1j7f0ia" sourceRef="Remove_film" targetRef="Event_1piblb1" />
     <bpmn:sequenceFlow id="Flow_15vfm13" sourceRef="Activity_0uxythg" targetRef="Activity_1j07ij4" />
     <bpmn:sequenceFlow id="Flow_1tuy7jc" sourceRef="Activity_1sa8dxk" targetRef="Remove_film" />
     <bpmn:sequenceFlow id="Flow_0m90hud" sourceRef="Gateway_00fa4rw" targetRef="Activity_0uxythg">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_removing == false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_removing == "false"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1b8bf29" sourceRef="Gateway_00fa4rw" targetRef="Activity_1sa8dxk">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_removing == true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_removing == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1d6yi0k" sourceRef="Choose_playlist" targetRef="Gateway_00fa4rw" />
     <bpmn:sequenceFlow id="Flow_0ca8aqd" sourceRef="Get_playlist_activity" targetRef="Choose_playlist" />
@@ -179,6 +147,7 @@
     <bpmn:sequenceFlow id="Flow_1sv1q72" sourceRef="Get_films_ativity" targetRef="Choose_film" />
     <bpmn:sequenceFlow id="Flow_1dkacqx" sourceRef="Choose_film" targetRef="Get_playlist_activity" />
   </bpmn:process>
+  <bpmn:error id="Error_09795eq" name="Error_1188mi6" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Add_film_to_playlist">
       <bpmndi:BPMNShape id="Participant_07bee9p_di" bpmnElement="Participant_07bee9p" isHorizontal="true">
@@ -190,41 +159,17 @@
       <bpmndi:BPMNShape id="Lane_1yabc72_di" bpmnElement="Lane_1yabc72" isHorizontal="true">
         <dc:Bounds x="190" y="350" width="1650" height="250" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0ss6u63_di" bpmnElement="Flow_0ss6u63">
-        <di:waypoint x="1615" y="290" />
-        <di:waypoint x="1634" y="290" />
-        <di:waypoint x="1634" y="320" />
-        <di:waypoint x="1652" y="320" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1jjdktp_di" bpmnElement="Flow_1jjdktp">
-        <di:waypoint x="1615" y="290" />
-        <di:waypoint x="1634" y="290" />
-        <di:waypoint x="1634" y="260" />
-        <di:waypoint x="1652" y="260" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11zlbr4_di" bpmnElement="Flow_11zlbr4">
         <di:waypoint x="1500" y="440" />
-        <di:waypoint x="1530" y="440" />
-        <di:waypoint x="1530" y="290" />
-        <di:waypoint x="1560" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1r79ab0_di" bpmnElement="Flow_1r79ab0">
-        <di:waypoint x="1255" y="290" />
-        <di:waypoint x="1284" y="290" />
-        <di:waypoint x="1284" y="260" />
-        <di:waypoint x="1312" y="260" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_15a2he4_di" bpmnElement="Flow_15a2he4">
-        <di:waypoint x="1255" y="290" />
-        <di:waypoint x="1284" y="290" />
-        <di:waypoint x="1284" y="320" />
-        <di:waypoint x="1312" y="320" />
+        <di:waypoint x="1576" y="440" />
+        <di:waypoint x="1576" y="320" />
+        <di:waypoint x="1652" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1j7f0ia_di" bpmnElement="Flow_1j7f0ia">
         <di:waypoint x="1150" y="440" />
-        <di:waypoint x="1170" y="440" />
-        <di:waypoint x="1170" y="290" />
-        <di:waypoint x="1200" y="290" />
+        <di:waypoint x="1231" y="440" />
+        <di:waypoint x="1231" y="320" />
+        <di:waypoint x="1312" y="320" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_15vfm13_di" bpmnElement="Flow_15vfm13">
         <di:waypoint x="1150" y="150" />
@@ -290,29 +235,11 @@
       <bpmndi:BPMNShape id="DataStoreReference_1pugje6_di" bpmnElement="DataStoreReference_1pugje6">
         <dc:Bounds x="1075" y="525" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0gkso0r_di" bpmnElement="Gateway_0gkso0r" isMarkerVisible="true">
-        <dc:Bounds x="1205" y="265" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1208" y="322" width="44" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1piblb1_di" bpmnElement="Event_1piblb1">
         <dc:Bounds x="1312" y="302" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0qgfg93_di" bpmnElement="Event_0u0yz3g">
-        <dc:Bounds x="1312" y="242" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1y6hduq_di" bpmnElement="Gateway_1y6hduq" isMarkerVisible="true">
-        <dc:Bounds x="1565" y="265" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1568" y="322" width="44" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_164kvl8_di" bpmnElement="Event_164kvl8">
         <dc:Bounds x="1652" y="302" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0goyos9_di" bpmnElement="Event_1ffblv3">
-        <dc:Bounds x="1652" y="242" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStoreReference_08ul4vy_di" bpmnElement="DataStoreReference_08ul4vy">
         <dc:Bounds x="1425" y="525" width="50" height="50" />
