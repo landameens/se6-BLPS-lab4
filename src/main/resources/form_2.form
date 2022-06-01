@@ -1,0 +1,32 @@
+{
+  "components": [
+    {
+      "label": "Название фильма",
+      "type": "textfield",
+      "id": "Field_1kpulvk",
+      "key": "film",
+      "validate": {
+        "required": true,
+        "minLength": 3,
+        "maxLength": 25
+      },
+      "properties": {}
+    },
+    {
+      "action": "submit",
+      "label": "Отправить",
+      "type": "button",
+      "id": "Field_176r6ab",
+      "key": "field_1gbbfa1"
+    }
+  ],
+  "type": "default",
+  "id": "Form_film_select",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.0.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}
