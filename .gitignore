@@ -4,4 +4,4 @@ target
 .mvn
 *.iml
 
-src/main/resources/application.properties
+src/main/resources/application.yaml
