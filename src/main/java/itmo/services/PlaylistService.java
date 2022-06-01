@@ -6,7 +6,7 @@ import itmo.model.Film;
 import itmo.model.ImportStat;
 import itmo.model.Playlist;
 import itmo.repositories.PlaylistRepository;
-//import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,13 +21,14 @@ public class PlaylistService {
     private final PlaylistRepository playlistRepository;
     private final FilmService filmService;
     private final UserService userService;
-//    private RabbitTemplate rabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public PlaylistService(PlaylistRepository playlistRepository, FilmService filmService, UserService userService) {
+    public PlaylistService(PlaylistRepository playlistRepository, FilmService filmService, UserService userService, RabbitTemplate rabbitTemplate) {
         this.playlistRepository = playlistRepository;
         this.filmService = filmService;
         this.userService = userService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public List<Playlist> getPlayListsByOwnerId(Long ownerId){
@@ -62,9 +63,9 @@ public class PlaylistService {
             importedPlaylist.setCountTimesImported(importedPlaylist.getCountTimesImported() + 1);
             playlistRepository.save(importedPlaylist);
 
-//            rabbitTemplate.convertAndSend("queue",
-//                    new ImportStat(userService.getMailById(importedPlaylist.getOwnerId()),
-//                            importedPlaylist.getName(), userService.getNameById(playlist.getOwnerId())));
+            rabbitTemplate.convertAndSend("queue",
+                    new ImportStat(userService.getMailById(importedPlaylist.getOwnerId()),
+                            importedPlaylist.getName(), userService.getNameById(playlist.getOwnerId())));
         }
     }
 
