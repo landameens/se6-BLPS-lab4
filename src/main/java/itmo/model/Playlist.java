@@ -1,13 +1,13 @@
-package com.itmo.model;
+package itmo.model;
 
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
-public class Film {
+public class Playlist {
     @Id
     @Column
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -20,5 +20,11 @@ public class Film {
     private String description;
 
     @Column
-    private Date releaseDate;
+    private int countTimesImported;
+
+    @Column
+    private Long ownerId;
+
+    @ManyToMany
+    private Set<Film> films;
 }

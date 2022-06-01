@@ -1,4 +1,4 @@
-package com.itmo.model;
+package itmo.model;
 
 import lombok.Data;
 
