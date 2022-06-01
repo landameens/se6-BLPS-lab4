@@ -16,8 +16,6 @@ public class GetFilmsDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        //ToDo: получить все фильмы
-        // => "films"
         List<Film> films = filmService.findByNameContains((String) execution.getVariable("film_name"));
         execution.setVariable("films", films);
     }
