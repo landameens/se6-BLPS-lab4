@@ -8,6 +8,8 @@ import itmo.model.Playlist;
 import itmo.repositories.PlaylistRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -35,8 +37,16 @@ public class PlaylistService {
         return playlistRepository.findAllByOwnerId(ownerId);
     }
 
-    public List<Playlist> getMyPlayLists(){
+    public List<Playlist> getMyPlayLists() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String ourMail = userDetails.getUsername();
         String mail = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        return playlistRepository.findAllByOwnerId(userService.getIdByMail(mail));
+    }
+
+    public List<Playlist> getPlayListsByMail(String mail) {
         return playlistRepository.findAllByOwnerId(userService.getIdByMail(mail));
     }
 

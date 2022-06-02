@@ -7,12 +7,12 @@
     },
     {
       "label": "id плейлиста",
-      "type": "number",
-      "id": "Field_05kmrx3",
+      "type": "textfield",
+      "id": "Field_0aojop3",
       "key": "playlist_id",
       "validate": {
         "required": true,
-        "min": 1
+        "minLength": 1
       }
     },
     {

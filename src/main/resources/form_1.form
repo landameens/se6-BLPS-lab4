@@ -1,14 +1,14 @@
 {
   "components": [
     {
-      "text": "# Text",
+      "text": "# Text\n",
       "type": "text",
       "id": "Field_0ahynkx"
     },
     {
       "label": "id фильма",
-      "type": "number",
-      "id": "Field_1s9oo56",
+      "type": "textfield",
+      "id": "Field_0h6bvqv",
       "key": "film_id",
       "validate": {
         "required": true

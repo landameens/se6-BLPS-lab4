@@ -4,6 +4,7 @@ import itmo.services.PlaylistService;
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.impl.identity.Authentication;
 
 import javax.inject.Named;
 
@@ -14,8 +15,14 @@ public class AddFilmDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        Long playlistId = (Long) execution.getVariable("playlist_id");
-        Long filmId = (Long) execution.getVariable("film_id");
+        String userId = null;
+        Authentication currentAuth = execution.getProcessEngine().getIdentityService().getCurrentAuthentication();
+        if (currentAuth != null) {
+            userId = currentAuth.getUserId();
+            System.out.println(userId);
+        }
+        Long playlistId = Long.parseLong((String) execution.getVariable("playlist_id"));
+        Long filmId = Long.parseLong((String) execution.getVariable("film_id"));
         playlistService.addFilm(playlistId, filmId);
     }
 }
