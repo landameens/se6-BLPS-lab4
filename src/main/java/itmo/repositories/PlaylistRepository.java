@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface PlaylistRepository extends JpaRepository<Playlist, Long> {
     List<Playlist> findAllByOwnerEmail(String ownerEmail);
+
+    List<Playlist> findByNameContains(String str);
 }

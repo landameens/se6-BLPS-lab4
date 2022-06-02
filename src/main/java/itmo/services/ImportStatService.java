@@ -2,8 +2,8 @@ package itmo.services;
 
 import itmo.model.ImportStat;
 import itmo.repositories.ImportStatRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -15,15 +15,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ImportStatService {
     private final ImportStatRepository importStatRepository;
     private final JavaMailSender javaMailSender;
-
-    @Autowired
-    public ImportStatService(ImportStatRepository importStatRepository, JavaMailSender javaMailSender) {
-        this.importStatRepository = importStatRepository;
-        this.javaMailSender = javaMailSender;
-    }
 
     @RabbitListener(queues = "queue")
     public void listen(ImportStat importStat) {

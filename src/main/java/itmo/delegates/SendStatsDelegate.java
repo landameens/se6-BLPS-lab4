@@ -1,24 +1,21 @@
 package itmo.delegates;
 
-
-import itmo.model.Playlist;
 import itmo.services.PlaylistService;
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import javax.inject.Named;
-import java.util.List;
 
-
-@Named("getPlaylistsDelegate")
+@Named("sendStats")
 @RequiredArgsConstructor
-public class GetPlaylistsDelegate implements JavaDelegate {
+public class SendStatsDelegate implements JavaDelegate {
     private final PlaylistService playlistService;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        List<Playlist> playlists = playlistService.getMyPlayLists();
-        execution.setVariable("playlists", playlists);
+        Long playlistIdTo = Long.parseLong((String) execution.getVariable("playlist_id_to"));
+        Long playlistIdFrom = Long.parseLong((String) execution.getVariable("playlist_id_from"));
+        playlistService.sendStats(playlistIdTo, playlistIdFrom);
     }
 }

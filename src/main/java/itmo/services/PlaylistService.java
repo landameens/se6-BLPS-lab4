@@ -6,34 +6,33 @@ import itmo.model.Film;
 import itmo.model.ImportStat;
 import itmo.model.Playlist;
 import itmo.repositories.PlaylistRepository;
+import lombok.RequiredArgsConstructor;
+import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.identity.User;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PlaylistService {
     private final PlaylistRepository playlistRepository;
     private final FilmService filmService;;
     private final RabbitTemplate rabbitTemplate;
+    private final IdentityService identityService;
 
-    @Autowired
-    public PlaylistService(PlaylistRepository playlistRepository, FilmService filmService, RabbitTemplate rabbitTemplate) {
-        this.playlistRepository = playlistRepository;
-        this.filmService = filmService;
-        this.rabbitTemplate = rabbitTemplate;
-    }
-
-    public List<Playlist> getPlayListsByOwnerId(String ownerEmail){
+    public List<Playlist> getPlayListsByOwnerEmail(String ownerEmail){
         return playlistRepository.findAllByOwnerEmail(ownerEmail);
     }
 
-    public void addFilm(Long playlistId, Long filmId, String ownerEmail){
+    public List<Playlist> findByNameContains(String str) {
+        return playlistRepository.findByNameContains(str);
+    }
+
+    public void addFilm(Long playlistId, Long filmId){
         Playlist playlist = getPlaylist(playlistId);
-        checkOwner(playlist, ownerEmail);
+        checkOwner(playlist);
         Film film = filmService.getFilm(filmId);
 
         if (playlist.getFilms().add(film)){
@@ -43,26 +42,9 @@ public class PlaylistService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void importPlaylist(Long playlistId, Long importedPlaylistId, String ownerEmail){
+    public void deleteFilm(Long playlistId, Long filmId){
         Playlist playlist = getPlaylist(playlistId);
-        checkOwner(playlist, ownerEmail);
-        Playlist importedPlaylist = getPlaylist(importedPlaylistId);
-
-        if(playlist.getFilms().addAll(importedPlaylist.getFilms())){
-            playlistRepository.save(playlist);
-            importedPlaylist.setCountTimesImported(importedPlaylist.getCountTimesImported() + 1);
-            playlistRepository.save(importedPlaylist);
-
-            rabbitTemplate.convertAndSend("queue",
-                    new ImportStat(importedPlaylist.getOwnerEmail(),
-                            importedPlaylist.getName(), playlist.getOwnerEmail()));
-        }
-    }
-
-    public void deleteFilm(Long playlistId, Long filmId, String ownerEmail){
-        Playlist playlist = getPlaylist(playlistId);
-        checkOwner(playlist, ownerEmail);
+        checkOwner(playlist);
         Film film = filmService.getFilm(filmId);
 
         if (playlist.getFilms().remove(film)){
@@ -78,8 +60,37 @@ public class PlaylistService {
         );
     }
 
-    public void checkOwner(Playlist playlist, String ownerEmail){
-        if (ownerEmail.equals(playlist.getOwnerEmail()))
+    public void checkOwner(Playlist playlist){
+        String userId = identityService.getCurrentAuthentication().getUserId();
+        User user = identityService.createUserQuery().userId(userId).singleResult();
+        if (!user.getEmail().equals(playlist.getOwnerEmail()))
             throw new ForbiddenException("The playlist is owned by someone else");
+    }
+
+    public List<Playlist> getMyPlayLists() {
+        String userId = identityService.getCurrentAuthentication().getUserId();
+        User user = identityService.createUserQuery().userId(userId).singleResult();
+        return playlistRepository.findAllByOwnerEmail(user.getEmail());
+    }
+
+    public void sendStats(Long playlistId, Long importedPlaylistId){
+        Playlist playlist = getPlaylist(playlistId);
+        Playlist importedPlaylist = getPlaylist(importedPlaylistId);
+
+        rabbitTemplate.convertAndSend("queue",
+                new ImportStat(importedPlaylist.getOwnerEmail(),
+                        importedPlaylist.getName(), playlist.getOwnerEmail()));
+    }
+
+    public void importPlaylist(Long playlistId, List<Film> importedMovies){
+        Playlist playlist = getPlaylist(playlistId);
+        checkOwner(playlist);
+        if(playlist.getFilms().addAll(importedMovies)) playlistRepository.save(playlist);
+    }
+
+    public void incrementCountTimesImported(Long playlistId){
+        Playlist playlist = getPlaylist(playlistId);
+        playlist.setCountTimesImported(playlist.getCountTimesImported() + 1);
+        playlistRepository.save(playlist);
     }
 }

@@ -13,14 +13,11 @@ import javax.inject.Named;
 @RequiredArgsConstructor
 public class RemoveFilmDelegate implements JavaDelegate {
     private final PlaylistService playlistService;
-    private final IdentityService identityService;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        String userId = identityService.getCurrentAuthentication().getUserId();
-        User user = identityService.createUserQuery().userId(userId).singleResult();
         Long playlistId = (Long) execution.getVariable("playlist_id");
         Long filmId = (Long) execution.getVariable("film_id");
-        playlistService.deleteFilm(playlistId, filmId, user.getEmail());
+        playlistService.deleteFilm(playlistId, filmId);
     }
 }
