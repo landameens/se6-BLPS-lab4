@@ -1,27 +1,30 @@
 {
   "components": [
     {
-      "label": "Название фильма",
+      "text": "# Text",
+      "type": "text",
+      "id": "Field_0y5qjlt"
+    },
+    {
+      "label": "id плейлиста",
       "type": "textfield",
-      "id": "Field_1kpulvk",
-      "key": "film_name",
+      "id": "Field_0mgbi83",
+      "key": "playlist_id_from",
       "validate": {
         "required": true,
-        "minLength": 3,
-        "maxLength": 25
-      },
-      "properties": {}
+        "minLength": 1
+      }
     },
     {
       "action": "submit",
-      "label": "Поиск",
+      "label": "Выбрать",
       "type": "button",
-      "id": "Field_176r6ab",
-      "key": "field_1gbbfa1"
+      "id": "Field_0dii4xu",
+      "key": "field_1mv6stu"
     }
   ],
   "type": "default",
-  "id": "Form_film_search",
+  "id": "Form_choose_playlist_from",
   "exporter": {
     "name": "Camunda Modeler",
     "version": "5.0.0"

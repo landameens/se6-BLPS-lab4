@@ -1,111 +1,354 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0rkaxit" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
-  <bpmn:collaboration id="Film_chose">
-    <bpmn:participant id="Participant_1g6k72s" processRef="Process_chose_film" />
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1st1air" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:collaboration id="Collaboration_1orr6z7">
+    <bpmn:participant id="Participant_1lvn8iv" processRef="Process_0bmhtov" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_chose_film" name="Chose film" isExecutable="true">
-    <bpmn:laneSet id="LaneSet_0fdq96t">
-      <bpmn:lane id="Lane_011el6c">
+  <bpmn:process id="Process_0bmhtov" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_0jl3omi">
+      <bpmn:lane id="Lane_0gokap0">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_1stogy0</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_0e2rq72</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_07vr0ge</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0b23zbj</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_0o89e0n</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0ssm3dn</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_16z52c3</bpmn:flowNodeRef>
       </bpmn:lane>
-      <bpmn:lane id="Lane_1jljrdr">
-        <bpmn:flowNodeRef>Activity_1atrlna</bpmn:flowNodeRef>
+      <bpmn:lane id="Lane_0deuk99">
+        <bpmn:flowNodeRef>Activity_0cpuvd8</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_072d9mv</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_03prg5j</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_175b586</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_08922p2">
+        <bpmn:flowNodeRef>Activity_0fdlfko</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="StartEvent_1">
-      <bpmn:outgoing>Flow_17spxh0</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0y3r92h</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_17spxh0" sourceRef="StartEvent_1" targetRef="Activity_1stogy0" />
-    <bpmn:userTask id="Activity_1stogy0" name="Ввести название фильма" camunda:formRef="Form_film_select" camunda:formRefBinding="latest">
+    <bpmn:sequenceFlow id="Flow_0y3r92h" sourceRef="StartEvent_1" targetRef="Activity_0b23zbj" />
+    <bpmn:sequenceFlow id="Flow_1o108im" sourceRef="Activity_0b23zbj" targetRef="Activity_0cpuvd8" />
+    <bpmn:sequenceFlow id="Flow_1lpl13c" sourceRef="Activity_0ssm3dn" targetRef="Activity_072d9mv" />
+    <bpmn:sequenceFlow id="Flow_1eb3ene" sourceRef="Activity_175b586" targetRef="Event_03prg5j" />
+    <bpmn:dataStoreReference id="DataStoreReference_0rgdjn3" />
+    <bpmn:serviceTask id="Activity_0fdlfko" name="сохранить статистику импорта пользователя">
+      <bpmn:property id="Property_1li4bsq" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DataInputAssociation_0nj3w7u">
+        <bpmn:sourceRef>DataObjectReference_1j7tf9g</bpmn:sourceRef>
+        <bpmn:targetRef>Property_1li4bsq</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_18yvkjd">
+        <bpmn:targetRef>DataStoreReference_0rgdjn3</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_0b23zbj" name="ввод названия подборки" camunda:formRef="Form_search_playlists" camunda:formRefBinding="latest">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="film_name">${film}</camunda:outputParameter>
+          <camunda:outputParameter name="playlist_name">${playlist_name}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_17spxh0</bpmn:incoming>
-      <bpmn:outgoing>Flow_0152jlg</bpmn:outgoing>
+      <bpmn:incoming>Flow_0y3r92h</bpmn:incoming>
+      <bpmn:incoming>Flow_02qf374</bpmn:incoming>
+      <bpmn:outgoing>Flow_1o108im</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:endEvent id="Event_0e2rq72">
-      <bpmn:incoming>Flow_0s6fku4</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0yc15tf" sourceRef="Activity_1atrlna" targetRef="Activity_07vr0ge" />
-    <bpmn:sequenceFlow id="Flow_0s6fku4" sourceRef="Activity_07vr0ge" targetRef="Event_0e2rq72" />
-    <bpmn:serviceTask id="Activity_1atrlna" name="найти все фильмы" camunda:delegateExpression="${findFilmDelegate}">
+    <bpmn:sequenceFlow id="Flow_0e214ls" sourceRef="Activity_0cpuvd8" targetRef="Gateway_0o89e0n" />
+    <bpmn:exclusiveGateway id="Gateway_0o89e0n" name="есть ли такие подборки">
+      <bpmn:incoming>Flow_0e214ls</bpmn:incoming>
+      <bpmn:outgoing>Flow_02qf374</bpmn:outgoing>
+      <bpmn:outgoing>Flow_09pb44k</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_0cpuvd8" name="Найти подборки с таким именем" camunda:delegateExpression="${getPlaylistsByName}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="film_name">${film_name}</camunda:inputParameter>
-          <camunda:outputParameter name="films">
+          <camunda:inputParameter name="playlist_name">${playlist_name}</camunda:inputParameter>
+          <camunda:outputParameter name="playlists">
+            <camunda:list />
+          </camunda:outputParameter>
+          <camunda:outputParameter name="is_exist" />
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1o108im</bpmn:incoming>
+      <bpmn:outgoing>Flow_0e214ls</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_02qf374" name="нет" sourceRef="Gateway_0o89e0n" targetRef="Activity_0b23zbj">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_exist=="false"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_09pb44k" name="да" sourceRef="Gateway_0o89e0n" targetRef="Activity_0ssm3dn">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_exist=="true"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:userTask id="Activity_0ssm3dn" name="выбрать подборку" camunda:formRef="Form_choose_playlist_from" camunda:formRefBinding="latest">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="playlists">
+            <camunda:list />
+          </camunda:inputParameter>
+          <camunda:outputParameter name="playlist_id_from">${playlist_id_in}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09pb44k</bpmn:incoming>
+      <bpmn:outgoing>Flow_1lpl13c</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0eptbam" sourceRef="Activity_072d9mv" targetRef="Activity_16z52c3" />
+    <bpmn:userTask id="Activity_16z52c3" name="выбрать подборку" camunda:formRef="Form_choose_playlist_for_import" camunda:formRefBinding="latest">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="user_playlists">
+            <camunda:list />
+          </camunda:inputParameter>
+          <camunda:outputParameter name="playlist_id_to">${playlist_id_to}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0eptbam</bpmn:incoming>
+      <bpmn:outgoing>Flow_0x9mort</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_072d9mv" name="получить все подборки пользователя" camunda:delegateExpression="${getPlaylistsDelegate}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="user_playlists">
             <camunda:list />
           </camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0152jlg</bpmn:incoming>
-      <bpmn:outgoing>Flow_0yc15tf</bpmn:outgoing>
+      <bpmn:incoming>Flow_1lpl13c</bpmn:incoming>
+      <bpmn:outgoing>Flow_0eptbam</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0152jlg" sourceRef="Activity_1stogy0" targetRef="Activity_1atrlna" />
-    <bpmn:task id="Activity_07vr0ge" name="Вывод фильма">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="films">
-            <camunda:list />
-          </camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0yc15tf</bpmn:incoming>
-      <bpmn:outgoing>Flow_0s6fku4</bpmn:outgoing>
-    </bpmn:task>
+    <bpmn:transaction id="Activity_175b586">
+      <bpmn:incoming>Flow_0x9mort</bpmn:incoming>
+      <bpmn:outgoing>Flow_1eb3ene</bpmn:outgoing>
+      <bpmn:startEvent id="Event_12saeie">
+        <bpmn:outgoing>Flow_19f0etu</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_19f0etu" sourceRef="Event_12saeie" targetRef="Activity_16ni0qa" />
+      <bpmn:serviceTask id="Activity_16ni0qa" name="получить список импортируемых фильмов" camunda:delegateExpression="${getAllImportedFilms}">
+        <bpmn:extensionElements>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="playlist_id_from">${playlist_id_from}</camunda:inputParameter>
+            <camunda:outputParameter name="imported_movie">
+              <camunda:list />
+            </camunda:outputParameter>
+          </camunda:inputOutput>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_19f0etu</bpmn:incoming>
+        <bpmn:outgoing>Flow_1762cfq</bpmn:outgoing>
+        <bpmn:property id="Property_1bx5reb" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_0obyw2h">
+          <bpmn:sourceRef>DataStoreReference_0kwaqh0</bpmn:sourceRef>
+          <bpmn:targetRef>Property_1bx5reb</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1762cfq" sourceRef="Activity_16ni0qa" targetRef="Activity_08yje4b" />
+      <bpmn:serviceTask id="Activity_08yje4b" name="добавление всех фильмов из получ. списка в нашу подборку" camunda:delegateExpression="${importFilms}">
+        <bpmn:extensionElements>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="imported_movie">
+              <camunda:list />
+            </camunda:inputParameter>
+            <camunda:inputParameter name="playlist_id_to">${playlist_id_to}</camunda:inputParameter>
+          </camunda:inputOutput>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1762cfq</bpmn:incoming>
+        <bpmn:outgoing>Flow_1tew1my</bpmn:outgoing>
+        <bpmn:dataOutputAssociation id="DataOutputAssociation_1hhul36">
+          <bpmn:targetRef>DataStoreReference_068j6jy</bpmn:targetRef>
+        </bpmn:dataOutputAssociation>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1tew1my" sourceRef="Activity_08yje4b" targetRef="Activity_03vh731" />
+      <bpmn:serviceTask id="Activity_03vh731" name="увеличить счетчик импорта импортируемой подборки" camunda:delegateExpression="${updateStats}">
+        <bpmn:incoming>Flow_1tew1my</bpmn:incoming>
+        <bpmn:outgoing>Flow_0usaclo</bpmn:outgoing>
+        <bpmn:dataOutputAssociation id="DataOutputAssociation_0w11ddr">
+          <bpmn:targetRef>DataObjectReference_1j7tf9g</bpmn:targetRef>
+        </bpmn:dataOutputAssociation>
+        <bpmn:dataOutputAssociation id="DataOutputAssociation_1ftmw6g">
+          <bpmn:targetRef>DataStoreReference_0fwmr50</bpmn:targetRef>
+        </bpmn:dataOutputAssociation>
+      </bpmn:serviceTask>
+      <bpmn:endEvent id="Event_0o03lk2">
+        <bpmn:incoming>Flow_0usaclo</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_0usaclo" sourceRef="Activity_03vh731" targetRef="Event_0o03lk2" />
+      <bpmn:dataObjectReference id="DataObjectReference_1j7tf9g" dataObjectRef="DataObject_0o744vy" />
+      <bpmn:dataObject id="DataObject_0o744vy" />
+      <bpmn:dataStoreReference id="DataStoreReference_0kwaqh0" />
+      <bpmn:dataStoreReference id="DataStoreReference_068j6jy" />
+      <bpmn:dataStoreReference id="DataStoreReference_0fwmr50" />
+    </bpmn:transaction>
+    <bpmn:sequenceFlow id="Flow_0x9mort" sourceRef="Activity_16z52c3" targetRef="Activity_175b586" />
+    <bpmn:endEvent id="Event_03prg5j">
+      <bpmn:incoming>Flow_1eb3ene</bpmn:incoming>
+    </bpmn:endEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Film_chose">
-      <bpmndi:BPMNShape id="Participant_1g6k72s_di" bpmnElement="Participant_1g6k72s" isHorizontal="true">
-        <dc:Bounds x="129" y="90" width="691" height="370" />
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1orr6z7">
+      <bpmndi:BPMNShape id="Participant_1lvn8iv_di" bpmnElement="Participant_1lvn8iv" isHorizontal="true">
+        <dc:Bounds x="129" y="60" width="1631" height="800" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_011el6c_di" bpmnElement="Lane_011el6c" isHorizontal="true">
-        <dc:Bounds x="159" y="90" width="661" height="250" />
+      <bpmndi:BPMNShape id="Lane_0gokap0_di" bpmnElement="Lane_0gokap0" isHorizontal="true">
+        <dc:Bounds x="159" y="60" width="1601" height="250" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_1jljrdr_di" bpmnElement="Lane_1jljrdr" isHorizontal="true">
-        <dc:Bounds x="159" y="340" width="661" height="120" />
+      <bpmndi:BPMNShape id="Lane_0deuk99_di" bpmnElement="Lane_0deuk99" isHorizontal="true">
+        <dc:Bounds x="159" y="310" width="1601" height="330" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0152jlg_di" bpmnElement="Flow_0152jlg">
-        <di:waypoint x="390" y="177" />
-        <di:waypoint x="425" y="177" />
-        <di:waypoint x="425" y="390" />
-        <di:waypoint x="450" y="390" />
+      <bpmndi:BPMNShape id="Lane_08922p2_di" bpmnElement="Lane_08922p2" isHorizontal="true">
+        <dc:Bounds x="159" y="640" width="1601" height="220" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0y3r92h_di" bpmnElement="Flow_0y3r92h">
+        <di:waypoint x="215" y="200" />
+        <di:waypoint x="260" y="200" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_17spxh0_di" bpmnElement="Flow_17spxh0">
-        <di:waypoint x="215" y="177" />
-        <di:waypoint x="290" y="177" />
+      <bpmndi:BPMNEdge id="Flow_1o108im_di" bpmnElement="Flow_1o108im">
+        <di:waypoint x="310" y="240" />
+        <di:waypoint x="310" y="400" />
+        <di:waypoint x="350" y="400" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0yc15tf_di" bpmnElement="Flow_0yc15tf">
-        <di:waypoint x="550" y="390" />
-        <di:waypoint x="570" y="390" />
-        <di:waypoint x="570" y="177" />
-        <di:waypoint x="610" y="177" />
+      <bpmndi:BPMNEdge id="Flow_1lpl13c_di" bpmnElement="Flow_1lpl13c">
+        <di:waypoint x="630" y="240" />
+        <di:waypoint x="630" y="360" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0s6fku4_di" bpmnElement="Flow_0s6fku4">
-        <di:waypoint x="710" y="177" />
-        <di:waypoint x="762" y="177" />
+      <bpmndi:BPMNEdge id="Flow_1eb3ene_di" bpmnElement="Flow_1eb3ene">
+        <di:waypoint x="1500" y="470" />
+        <di:waypoint x="1642" y="470" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0e214ls_di" bpmnElement="Flow_0e214ls">
+        <di:waypoint x="450" y="400" />
+        <di:waypoint x="480" y="400" />
+        <di:waypoint x="480" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02qf374_di" bpmnElement="Flow_02qf374">
+        <di:waypoint x="455" y="200" />
+        <di:waypoint x="360" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="399" y="182" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09pb44k_di" bpmnElement="Flow_09pb44k">
+        <di:waypoint x="505" y="200" />
+        <di:waypoint x="580" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="536" y="182" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0eptbam_di" bpmnElement="Flow_0eptbam">
+        <di:waypoint x="680" y="400" />
+        <di:waypoint x="740" y="400" />
+        <di:waypoint x="740" y="200" />
+        <di:waypoint x="800" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0x9mort_di" bpmnElement="Flow_0x9mort">
+        <di:waypoint x="850" y="240" />
+        <di:waypoint x="850" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="179" y="159" width="36" height="36" />
+        <dc:Bounds x="179" y="182" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ym8on9_di" bpmnElement="Activity_1stogy0">
-        <dc:Bounds x="290" y="137" width="100" height="80" />
+      <bpmndi:BPMNShape id="DataStoreReference_0rgdjn3_di" bpmnElement="DataStoreReference_0rgdjn3">
+        <dc:Bounds x="1415" y="795" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ugcjna_di" bpmnElement="Activity_0fdlfko">
+        <dc:Bounds x="1390" y="660" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0e2rq72_di" bpmnElement="Event_0e2rq72">
-        <dc:Bounds x="762" y="159" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_13gurtx_di" bpmnElement="Activity_1atrlna">
-        <dc:Bounds x="450" y="350" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0isd5yl_di" bpmnElement="Activity_0b23zbj">
+        <dc:Bounds x="260" y="160" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0f1zg4n_di" bpmnElement="Activity_07vr0ge">
-        <dc:Bounds x="610" y="137" width="100" height="80" />
+      <bpmndi:BPMNShape id="Gateway_0o89e0n_di" bpmnElement="Gateway_0o89e0n" isMarkerVisible="true">
+        <dc:Bounds x="455" y="175" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="445" y="145" width="70" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1rrrrgm_di" bpmnElement="Activity_0cpuvd8">
+        <dc:Bounds x="350" y="360" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0blgxe6_di" bpmnElement="Activity_0ssm3dn">
+        <dc:Bounds x="580" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06pdovd_di" bpmnElement="Activity_072d9mv">
+        <dc:Bounds x="580" y="360" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0o6hekh_di" bpmnElement="Activity_16z52c3">
+        <dc:Bounds x="800" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_03prg5j_di" bpmnElement="Event_03prg5j">
+        <dc:Bounds x="1642" y="452" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0nlncnl_di" bpmnElement="Activity_175b586" isExpanded="true">
+        <dc:Bounds x="810" y="360" width="690" height="260" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_19f0etu_di" bpmnElement="Flow_19f0etu">
+        <di:waypoint x="886" y="440" />
+        <di:waypoint x="940" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1762cfq_di" bpmnElement="Flow_1762cfq">
+        <di:waypoint x="1040" y="440" />
+        <di:waypoint x="1100" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tew1my_di" bpmnElement="Flow_1tew1my">
+        <di:waypoint x="1200" y="440" />
+        <di:waypoint x="1260" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0usaclo_di" bpmnElement="Flow_0usaclo">
+        <di:waypoint x="1360" y="440" />
+        <di:waypoint x="1422" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_12saeie_di" bpmnElement="Event_12saeie">
+        <dc:Bounds x="850" y="422" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1f1fpr5_di" bpmnElement="Activity_16ni0qa">
+        <dc:Bounds x="940" y="400" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1a940e6_di" bpmnElement="Activity_08yje4b">
+        <dc:Bounds x="1100" y="400" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1fgms4w_di" bpmnElement="Activity_03vh731">
+        <dc:Bounds x="1260" y="400" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0o03lk2_di" bpmnElement="Event_0o03lk2">
+        <dc:Bounds x="1422" y="422" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataObjectReference_1j7tf9g_di" bpmnElement="DataObjectReference_1j7tf9g">
+        <dc:Bounds x="1422" y="545" width="36" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_0kwaqh0_di" bpmnElement="DataStoreReference_0kwaqh0">
+        <dc:Bounds x="965" y="545" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_068j6jy_di" bpmnElement="DataStoreReference_068j6jy">
+        <dc:Bounds x="1125" y="545" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_0fwmr50_di" bpmnElement="DataStoreReference_0fwmr50">
+        <dc:Bounds x="1285" y="545" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="DataInputAssociation_0nj3w7u_di" bpmnElement="DataInputAssociation_0nj3w7u">
+        <di:waypoint x="1440" y="595" />
+        <di:waypoint x="1440" y="660" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_0obyw2h_di" bpmnElement="DataInputAssociation_0obyw2h">
+        <di:waypoint x="990" y="545" />
+        <di:waypoint x="990" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_1hhul36_di" bpmnElement="DataOutputAssociation_1hhul36">
+        <di:waypoint x="1150" y="480" />
+        <di:waypoint x="1150" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0w11ddr_di" bpmnElement="DataOutputAssociation_0w11ddr">
+        <di:waypoint x="1351" y="480" />
+        <di:waypoint x="1422" y="549" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_1ftmw6g_di" bpmnElement="DataOutputAssociation_1ftmw6g">
+        <di:waypoint x="1310" y="480" />
+        <di:waypoint x="1310" y="545" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_18yvkjd_di" bpmnElement="DataOutputAssociation_18yvkjd">
+        <di:waypoint x="1442" y="740" />
+        <di:waypoint x="1444" y="795" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

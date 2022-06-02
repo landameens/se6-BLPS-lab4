@@ -14,6 +14,7 @@ public class GetFilmsDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
+        //todo по названию "film_name" => "films", "is_exist" (true - что-то есть)
         execution.setVariable("films", filmService.getAllFilms());
     }
 }

@@ -1,0 +1,31 @@
+{
+  "components": [
+    {
+      "text": "# Text",
+      "type": "text",
+      "id": "Field_1n5n2zr"
+    },
+    {
+      "label": "id плейлиста",
+      "type": "textfield",
+      "id": "Field_0fqbx2n",
+      "key": "playlist_id_to"
+    },
+    {
+      "action": "submit",
+      "label": "Импортировать",
+      "type": "button",
+      "id": "Field_0o38lyl",
+      "key": "field_0etsisz"
+    }
+  ],
+  "type": "default",
+  "id": "Form_choose_playlist_for_import",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.0.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}
