@@ -9,6 +9,6 @@ import javax.inject.Named;
 public class ImportFilmsDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        //todo: "imported_movie", "playlist_id_to"
+        //todo: "imported_movies", "playlist_id_to"
     }
 }
