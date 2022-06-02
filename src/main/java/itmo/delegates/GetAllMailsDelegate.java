@@ -15,6 +15,5 @@ public class GetAllMailsDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         execution.setVariable("mails", importStatService.getMails());
-        System.out.println(importStatService.getMails());
     }
 }

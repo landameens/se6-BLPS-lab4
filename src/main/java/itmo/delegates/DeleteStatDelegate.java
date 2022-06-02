@@ -15,6 +15,6 @@ public class DeleteStatDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         String mail = (String) execution.getVariable("mail");
-//        importStatService.deleteStatByOwnerMail(mail);
+        importStatService.deleteStatByOwnerMail(mail);
     }
 }

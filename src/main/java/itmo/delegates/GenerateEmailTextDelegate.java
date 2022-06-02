@@ -15,7 +15,6 @@ public class GenerateEmailTextDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         String mail = (String) execution.getVariable("mail");
-        System.out.println(mail);
         String text = importStatService.generateEmailText(mail);
         execution.setVariable("text", text);
     }

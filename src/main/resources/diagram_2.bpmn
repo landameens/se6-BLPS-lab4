@@ -52,9 +52,7 @@
         <bpmn:extensionElements>
           <camunda:inputOutput>
             <camunda:inputParameter name="playlist_id_from">${playlist_id_from}</camunda:inputParameter>
-            <camunda:outputParameter name="imported_movies">
-              <camunda:list />
-            </camunda:outputParameter>
+            <camunda:outputParameter name="imported_movies">${imported_movies}</camunda:outputParameter>
           </camunda:inputOutput>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_19f0etu</bpmn:incoming>
@@ -69,9 +67,7 @@
       <bpmn:serviceTask id="Activity_08yje4b" name="добавление всех фильмов из получ. списка в нашу подборку" camunda:delegateExpression="${importFilms}">
         <bpmn:extensionElements>
           <camunda:inputOutput>
-            <camunda:inputParameter name="imported_movies">
-              <camunda:list />
-            </camunda:inputParameter>
+            <camunda:inputParameter name="imported_movies">${imported_movies}</camunda:inputParameter>
             <camunda:inputParameter name="playlist_id_to">${playlist_id_to}</camunda:inputParameter>
           </camunda:inputOutput>
         </bpmn:extensionElements>

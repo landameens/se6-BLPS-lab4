@@ -7,9 +7,7 @@
     <bpmn:serviceTask id="Activity_1ht3abk" name="получить список email всех пользователей" camunda:delegateExpression="${getAllMailsDelegate}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="mails">
-            <camunda:list />
-          </camunda:outputParameter>
+          <camunda:outputParameter name="mails">${mails}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0wobikc</bpmn:incoming>
@@ -40,7 +38,9 @@
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_09bcoqf</bpmn:incoming>
       <bpmn:outgoing>Flow_0e7fwj7</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics isSequential="true" />
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true" camunda:collection="mails" camunda:elementVariable="mail">
+        <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${mails.size() &lt; 1}</bpmn:completionCondition>
+      </bpmn:multiInstanceLoopCharacteristics>
       <bpmn:startEvent id="Event_1s67rkk">
         <bpmn:outgoing>Flow_1yi2ny7</bpmn:outgoing>
       </bpmn:startEvent>
