@@ -8,10 +8,6 @@ import itmo.model.Playlist;
 import itmo.repositories.PlaylistRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,38 +17,23 @@ import java.util.List;
 @Service
 public class PlaylistService {
     private final PlaylistRepository playlistRepository;
-    private final FilmService filmService;
-    private final UserService userService;
+    private final FilmService filmService;;
     private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public PlaylistService(PlaylistRepository playlistRepository, FilmService filmService, UserService userService, RabbitTemplate rabbitTemplate) {
+    public PlaylistService(PlaylistRepository playlistRepository, FilmService filmService, RabbitTemplate rabbitTemplate) {
         this.playlistRepository = playlistRepository;
         this.filmService = filmService;
-        this.userService = userService;
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public List<Playlist> getPlayListsByOwnerId(Long ownerId){
-        return playlistRepository.findAllByOwnerId(ownerId);
+    public List<Playlist> getPlayListsByOwnerId(String ownerEmail){
+        return playlistRepository.findAllByOwnerEmail(ownerEmail);
     }
 
-    public List<Playlist> getMyPlayLists() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String ourMail = userDetails.getUsername();
-        String mail = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        return playlistRepository.findAllByOwnerId(userService.getIdByMail(mail));
-    }
-
-    public List<Playlist> getPlayListsByMail(String mail) {
-        return playlistRepository.findAllByOwnerId(userService.getIdByMail(mail));
-    }
-
-    public void addFilm(Long playlistId, Long filmId){
+    public void addFilm(Long playlistId, Long filmId, String ownerEmail){
         Playlist playlist = getPlaylist(playlistId);
-        checkOwner(playlist);
+        checkOwner(playlist, ownerEmail);
         Film film = filmService.getFilm(filmId);
 
         if (playlist.getFilms().add(film)){
@@ -63,9 +44,9 @@ public class PlaylistService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void importPlaylist(Long playlistId, Long importedPlaylistId){
+    public void importPlaylist(Long playlistId, Long importedPlaylistId, String ownerEmail){
         Playlist playlist = getPlaylist(playlistId);
-        checkOwner(playlist);
+        checkOwner(playlist, ownerEmail);
         Playlist importedPlaylist = getPlaylist(importedPlaylistId);
 
         if(playlist.getFilms().addAll(importedPlaylist.getFilms())){
@@ -74,14 +55,14 @@ public class PlaylistService {
             playlistRepository.save(importedPlaylist);
 
             rabbitTemplate.convertAndSend("queue",
-                    new ImportStat(userService.getMailById(importedPlaylist.getOwnerId()),
-                            importedPlaylist.getName(), userService.getNameById(playlist.getOwnerId())));
+                    new ImportStat(importedPlaylist.getOwnerEmail(),
+                            importedPlaylist.getName(), playlist.getOwnerEmail()));
         }
     }
 
-    public void deleteFilm(Long playlistId, Long filmId){
+    public void deleteFilm(Long playlistId, Long filmId, String ownerEmail){
         Playlist playlist = getPlaylist(playlistId);
-        checkOwner(playlist);
+        checkOwner(playlist, ownerEmail);
         Film film = filmService.getFilm(filmId);
 
         if (playlist.getFilms().remove(film)){
@@ -97,9 +78,8 @@ public class PlaylistService {
         );
     }
 
-    public void checkOwner(Playlist playlist){
-        String mail = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        if (!userService.getIdByMail(mail).equals(playlist.getOwnerId()))
+    public void checkOwner(Playlist playlist, String ownerEmail){
+        if (ownerEmail.equals(playlist.getOwnerEmail()))
             throw new ForbiddenException("The playlist is owned by someone else");
     }
 }

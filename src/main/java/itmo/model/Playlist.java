@@ -24,7 +24,7 @@ public class Playlist implements Serializable {
     private int countTimesImported;
 
     @Column
-    private Long ownerId;
+    private String ownerEmail;
 
     @ManyToMany
     private Set<Film> films;

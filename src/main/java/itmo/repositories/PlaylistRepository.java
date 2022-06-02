@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PlaylistRepository extends JpaRepository<Playlist, Long> {
-    List<Playlist> findAllByOwnerId(Long ownerId);
+    List<Playlist> findAllByOwnerEmail(String ownerEmail);
 }
