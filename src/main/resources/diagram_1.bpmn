@@ -28,8 +28,8 @@
           <camunda:inputParameter name="playlists">
             <camunda:list />
           </camunda:inputParameter>
-          <camunda:outputParameter name="playlist_id">${playlist_id}</camunda:outputParameter>
           <camunda:outputParameter name="is_removing">${is_removing}</camunda:outputParameter>
+          <camunda:outputParameter name="playlist_id">${playlist_id}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ca8aqd</bpmn:incoming>
@@ -59,7 +59,8 @@
     <bpmn:serviceTask id="Remove_film" name="удалить фильм из подборки" camunda:delegateExpression="${removeFilmDelegate}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="is_success">true</camunda:outputParameter>
+          <camunda:inputParameter name="playlist_id">${playlist_id}</camunda:inputParameter>
+          <camunda:inputParameter name="film_id">${film_id}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1tuy7jc</bpmn:incoming>
@@ -71,7 +72,8 @@
     <bpmn:serviceTask id="Activity_1j07ij4" name="добавить фильм в подборку" camunda:delegateExpression="${addFilmDelegate}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="is_success">true</camunda:outputParameter>
+          <camunda:inputParameter name="film_id">${film_id}</camunda:inputParameter>
+          <camunda:inputParameter name="playlist_id">${playlist_id}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_15vfm13</bpmn:incoming>
@@ -107,7 +109,7 @@
           </camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1dkacqx</bpmn:incoming>
+      <bpmn:incoming>Flow_06d26xu</bpmn:incoming>
       <bpmn:outgoing>Flow_0ca8aqd</bpmn:outgoing>
       <bpmn:property id="Property_0t5o4xi" name="__targetRef_placeholder" />
       <bpmn:dataInputAssociation id="DataInputAssociation_1hjorbl">
@@ -117,35 +119,33 @@
     </bpmn:serviceTask>
     <bpmn:dataStoreReference id="DataStoreReference_1ruex1k" />
     <bpmn:dataStoreReference id="DataStoreReference_1rjah9r" />
-    <bpmn:userTask id="Choose_film" name="выбор фильма" camunda:formRef="Form_choose_film" camunda:formRefBinding="latest">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="films">
-            <camunda:list>
-              <camunda:value>defgh</camunda:value>
-            </camunda:list>
-          </camunda:inputParameter>
-          <camunda:outputParameter name="film_id">${film_id}</camunda:outputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1sv1q72</bpmn:incoming>
-      <bpmn:outgoing>Flow_1dkacqx</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_11zlbr4" sourceRef="Activity_1j07ij4" targetRef="Event_164kvl8" />
     <bpmn:sequenceFlow id="Flow_1j7f0ia" sourceRef="Remove_film" targetRef="Event_1piblb1" />
     <bpmn:sequenceFlow id="Flow_15vfm13" sourceRef="Activity_0uxythg" targetRef="Activity_1j07ij4" />
     <bpmn:sequenceFlow id="Flow_1tuy7jc" sourceRef="Activity_1sa8dxk" targetRef="Remove_film" />
     <bpmn:sequenceFlow id="Flow_0m90hud" sourceRef="Gateway_00fa4rw" targetRef="Activity_0uxythg">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_removing == "false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_removing=="false"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1b8bf29" sourceRef="Gateway_00fa4rw" targetRef="Activity_1sa8dxk">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_removing == "true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_removing=="true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1d6yi0k" sourceRef="Choose_playlist" targetRef="Gateway_00fa4rw" />
     <bpmn:sequenceFlow id="Flow_0ca8aqd" sourceRef="Get_playlist_activity" targetRef="Choose_playlist" />
     <bpmn:sequenceFlow id="Flow_0u2roa6" sourceRef="StartEvent_1" targetRef="Get_films_ativity" />
     <bpmn:sequenceFlow id="Flow_1sv1q72" sourceRef="Get_films_ativity" targetRef="Choose_film" />
-    <bpmn:sequenceFlow id="Flow_1dkacqx" sourceRef="Choose_film" targetRef="Get_playlist_activity" />
+    <bpmn:sequenceFlow id="Flow_06d26xu" sourceRef="Choose_film" targetRef="Get_playlist_activity" />
+    <bpmn:userTask id="Choose_film" name="выбор фильма" camunda:formRef="Form_choose_film" camunda:formRefBinding="latest">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="films">
+            <camunda:list />
+          </camunda:inputParameter>
+          <camunda:outputParameter name="film_id">${film_id}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1sv1q72</bpmn:incoming>
+      <bpmn:outgoing>Flow_06d26xu</bpmn:outgoing>
+    </bpmn:userTask>
   </bpmn:process>
   <bpmn:error id="Error_09795eq" name="Error_1188mi6" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -153,50 +153,17 @@
       <bpmndi:BPMNShape id="Participant_07bee9p_di" bpmnElement="Participant_07bee9p" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="1680" height="520" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_1gdtqzc_di" bpmnElement="Lane_1gdtqzc" isHorizontal="true">
-        <dc:Bounds x="190" y="80" width="1650" height="270" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_1yabc72_di" bpmnElement="Lane_1yabc72" isHorizontal="true">
         <dc:Bounds x="190" y="350" width="1650" height="250" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_11zlbr4_di" bpmnElement="Flow_11zlbr4">
-        <di:waypoint x="1500" y="440" />
-        <di:waypoint x="1576" y="440" />
-        <di:waypoint x="1576" y="320" />
-        <di:waypoint x="1652" y="320" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1j7f0ia_di" bpmnElement="Flow_1j7f0ia">
-        <di:waypoint x="1150" y="440" />
-        <di:waypoint x="1231" y="440" />
-        <di:waypoint x="1231" y="320" />
-        <di:waypoint x="1312" y="320" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_15vfm13_di" bpmnElement="Flow_15vfm13">
-        <di:waypoint x="1150" y="150" />
-        <di:waypoint x="1450" y="150" />
-        <di:waypoint x="1450" y="400" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1tuy7jc_di" bpmnElement="Flow_1tuy7jc">
-        <di:waypoint x="1100" y="300" />
-        <di:waypoint x="1100" y="400" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0m90hud_di" bpmnElement="Flow_0m90hud">
-        <di:waypoint x="940" y="235" />
-        <di:waypoint x="940" y="150" />
-        <di:waypoint x="1050" y="150" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1b8bf29_di" bpmnElement="Flow_1b8bf29">
-        <di:waypoint x="965" y="260" />
-        <di:waypoint x="1050" y="260" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1d6yi0k_di" bpmnElement="Flow_1d6yi0k">
-        <di:waypoint x="830" y="260" />
-        <di:waypoint x="915" y="260" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ca8aqd_di" bpmnElement="Flow_0ca8aqd">
-        <di:waypoint x="660" y="400" />
-        <di:waypoint x="660" y="260" />
-        <di:waypoint x="730" y="260" />
+      <bpmndi:BPMNShape id="Lane_1gdtqzc_di" bpmnElement="Lane_1gdtqzc" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1650" height="270" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1sv1q72_di" bpmnElement="Flow_1sv1q72">
+        <di:waypoint x="410" y="440" />
+        <di:waypoint x="430" y="440" />
+        <di:waypoint x="430" y="260" />
+        <di:waypoint x="460" y="260" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0u2roa6_di" bpmnElement="Flow_0u2roa6">
         <di:waypoint x="268" y="260" />
@@ -204,15 +171,49 @@
         <di:waypoint x="289" y="440" />
         <di:waypoint x="310" y="440" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1sv1q72_di" bpmnElement="Flow_1sv1q72">
-        <di:waypoint x="410" y="440" />
-        <di:waypoint x="430" y="440" />
-        <di:waypoint x="430" y="260" />
-        <di:waypoint x="480" y="260" />
+      <bpmndi:BPMNEdge id="Flow_0ca8aqd_di" bpmnElement="Flow_0ca8aqd">
+        <di:waypoint x="660" y="400" />
+        <di:waypoint x="660" y="260" />
+        <di:waypoint x="730" y="260" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1dkacqx_di" bpmnElement="Flow_1dkacqx">
-        <di:waypoint x="530" y="300" />
-        <di:waypoint x="530" y="440" />
+      <bpmndi:BPMNEdge id="Flow_1d6yi0k_di" bpmnElement="Flow_1d6yi0k">
+        <di:waypoint x="830" y="260" />
+        <di:waypoint x="915" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1b8bf29_di" bpmnElement="Flow_1b8bf29">
+        <di:waypoint x="965" y="260" />
+        <di:waypoint x="1050" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0m90hud_di" bpmnElement="Flow_0m90hud">
+        <di:waypoint x="940" y="235" />
+        <di:waypoint x="940" y="150" />
+        <di:waypoint x="1050" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tuy7jc_di" bpmnElement="Flow_1tuy7jc">
+        <di:waypoint x="1100" y="300" />
+        <di:waypoint x="1100" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15vfm13_di" bpmnElement="Flow_15vfm13">
+        <di:waypoint x="1150" y="150" />
+        <di:waypoint x="1450" y="150" />
+        <di:waypoint x="1450" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1j7f0ia_di" bpmnElement="Flow_1j7f0ia">
+        <di:waypoint x="1150" y="440" />
+        <di:waypoint x="1231" y="440" />
+        <di:waypoint x="1231" y="320" />
+        <di:waypoint x="1312" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11zlbr4_di" bpmnElement="Flow_11zlbr4">
+        <di:waypoint x="1500" y="440" />
+        <di:waypoint x="1576" y="440" />
+        <di:waypoint x="1576" y="320" />
+        <di:waypoint x="1652" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06d26xu_di" bpmnElement="Flow_06d26xu">
+        <di:waypoint x="560" y="260" />
+        <di:waypoint x="585" y="260" />
+        <di:waypoint x="585" y="440" />
         <di:waypoint x="610" y="440" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_1fyzovp_di" bpmnElement="Choose_playlist">
@@ -269,7 +270,7 @@
         <dc:Bounds x="335" y="525" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1r31g9j_di" bpmnElement="Choose_film">
-        <dc:Bounds x="480" y="220" width="100" height="80" />
+        <dc:Bounds x="460" y="220" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="DataOutputAssociation_1wiyyu3_di" bpmnElement="DataOutputAssociation_1wiyyu3">

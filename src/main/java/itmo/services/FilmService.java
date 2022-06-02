@@ -17,13 +17,15 @@ public class FilmService {
         this.filmRepository = filmRepository;
     }
 
-    public Film getFilm(Long id){
-        return filmRepository.findById(id).orElseThrow(
-                () -> new BadRequestException("The film doesn't exist")
-        );
+    public Film getFilm(Long id) {
+        return filmRepository.findById(id).orElseThrow(() -> new BadRequestException("The film doesn't exist"));
     }
 
-    public List<Film> findByNameContains(String str){
+    public List<Film> findByNameContains(String str) {
         return filmRepository.findByNameContains(str);
+    }
+
+    public List<Film> getAllFilms() {
+        return filmRepository.findAll();
     }
 }

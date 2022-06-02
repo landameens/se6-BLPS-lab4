@@ -3,11 +3,12 @@ package itmo.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Data
 @Entity
-public class Playlist {
+public class Playlist implements Serializable {
     @Id
     @Column
     @GeneratedValue(strategy= GenerationType.IDENTITY)
