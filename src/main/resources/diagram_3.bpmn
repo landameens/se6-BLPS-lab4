@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_02t8s4o" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:collaboration id="Send_mail">
+    <bpmn:participant id="Participant_05m4nk5" name="Mail Service" processRef="Process_03ud9n3" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_03ud9n3" isExecutable="true">
+    <bpmn:serviceTask id="Activity_1ht3abk" name="получить список email всех пользователей" camunda:delegateExpression="${getAllMailsDelegate}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="mails">
+            <camunda:list />
+          </camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0wobikc</bpmn:incoming>
+      <bpmn:outgoing>Flow_09bcoqf</bpmn:outgoing>
+      <bpmn:property id="Property_0n6st5s" name="__targetRef_placeholder" />
+      <bpmn:dataInputAssociation id="DataInputAssociation_1s1dyhm">
+        <bpmn:sourceRef>DataStoreReference_017aab0</bpmn:sourceRef>
+        <bpmn:targetRef>Property_0n6st5s</bpmn:targetRef>
+      </bpmn:dataInputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:dataStoreReference id="DataStoreReference_017aab0" />
+    <bpmn:startEvent id="Event_02w090w" name="каждые 7 дней">
+      <bpmn:outgoing>Flow_0wobikc</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0ump65g">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT10S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_17fr017">
+      <bpmn:incoming>Flow_0e7fwj7</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:subProcess id="Activity_1ohmxzd">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="mails">
+            <camunda:list />
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09bcoqf</bpmn:incoming>
+      <bpmn:outgoing>Flow_0e7fwj7</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics isSequential="true" />
+      <bpmn:startEvent id="Event_1s67rkk">
+        <bpmn:outgoing>Flow_1yi2ny7</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sendTask id="Activity_19hasnr" name="Отправить письмо со  статистикой" camunda:delegateExpression="${sendMailDelegate}">
+        <bpmn:extensionElements>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="text">${text}</camunda:inputParameter>
+            <camunda:inputParameter name="mail">${mail}</camunda:inputParameter>
+          </camunda:inputOutput>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0ffzio9</bpmn:incoming>
+        <bpmn:outgoing>Flow_0padot8</bpmn:outgoing>
+      </bpmn:sendTask>
+      <bpmn:serviceTask id="Activity_1om8nr5" name="Сгенерировать текст письма" camunda:delegateExpression="${generateEmailTextDelegate}">
+        <bpmn:extensionElements>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="mail">${mail}</camunda:inputParameter>
+            <camunda:outputParameter name="text">${text}</camunda:outputParameter>
+          </camunda:inputOutput>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1yi2ny7</bpmn:incoming>
+        <bpmn:outgoing>Flow_0ffzio9</bpmn:outgoing>
+        <bpmn:property id="Property_1j562ro" name="__targetRef_placeholder" />
+        <bpmn:dataInputAssociation id="DataInputAssociation_1fm5p42">
+          <bpmn:sourceRef>DataStoreReference_0ycr4a2</bpmn:sourceRef>
+          <bpmn:targetRef>Property_1j562ro</bpmn:targetRef>
+        </bpmn:dataInputAssociation>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="Activity_17m8mpf" name="Очистить статистику для пользователя" camunda:delegateExpression="${deleteStatDelegate}">
+        <bpmn:extensionElements>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="mail">${mail}</camunda:inputParameter>
+          </camunda:inputOutput>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0padot8</bpmn:incoming>
+        <bpmn:outgoing>Flow_17j4sgi</bpmn:outgoing>
+        <bpmn:dataOutputAssociation id="DataOutputAssociation_1d6j4l0">
+          <bpmn:targetRef>DataStoreReference_1u08xa8</bpmn:targetRef>
+        </bpmn:dataOutputAssociation>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_0ffzio9" sourceRef="Activity_1om8nr5" targetRef="Activity_19hasnr" />
+      <bpmn:sequenceFlow id="Flow_0padot8" sourceRef="Activity_19hasnr" targetRef="Activity_17m8mpf" />
+      <bpmn:dataStoreReference id="DataStoreReference_0ycr4a2" />
+      <bpmn:dataStoreReference id="DataStoreReference_1u08xa8" />
+      <bpmn:sequenceFlow id="Flow_1yi2ny7" sourceRef="Event_1s67rkk" targetRef="Activity_1om8nr5" />
+      <bpmn:endEvent id="Event_1geixb9">
+        <bpmn:incoming>Flow_17j4sgi</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_17j4sgi" sourceRef="Activity_17m8mpf" targetRef="Event_1geixb9" />
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_0wobikc" sourceRef="Event_02w090w" targetRef="Activity_1ht3abk" />
+    <bpmn:sequenceFlow id="Flow_09bcoqf" sourceRef="Activity_1ht3abk" targetRef="Activity_1ohmxzd" />
+    <bpmn:sequenceFlow id="Flow_0e7fwj7" sourceRef="Activity_1ohmxzd" targetRef="Event_17fr017" />
+  </bpmn:process>
+  <bpmn:signal id="Signal_1hqmb91" name="Signal_1hqmb91" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Send_mail">
+      <bpmndi:BPMNShape id="Participant_05m4nk5_di" bpmnElement="Participant_05m4nk5" isHorizontal="true">
+        <dc:Bounds x="160" y="79" width="1180" height="341" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0wobikc_di" bpmnElement="Flow_0wobikc">
+        <di:waypoint x="278" y="243" />
+        <di:waypoint x="340" y="243" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09bcoqf_di" bpmnElement="Flow_09bcoqf">
+        <di:waypoint x="440" y="243" />
+        <di:waypoint x="510" y="243" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0e7fwj7_di" bpmnElement="Flow_0e7fwj7">
+        <di:waypoint x="1218" y="243" />
+        <di:waypoint x="1272" y="243" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_1yxe0cd_di" bpmnElement="Activity_1ht3abk">
+        <dc:Bounds x="340" y="203" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_017aab0_di" bpmnElement="DataStoreReference_017aab0">
+        <dc:Bounds x="365" y="325" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1jw9qe2_di" bpmnElement="Event_02w090w">
+        <dc:Bounds x="242" y="225" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="222" y="268" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_17fr017_di" bpmnElement="Event_17fr017">
+        <dc:Bounds x="1272" y="225" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0yqbwyc_di" bpmnElement="Activity_1ohmxzd" isExpanded="true">
+        <dc:Bounds x="510" y="130" width="708" height="225" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0ffzio9_di" bpmnElement="Flow_0ffzio9">
+        <di:waypoint x="750" y="200" />
+        <di:waypoint x="830" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0padot8_di" bpmnElement="Flow_0padot8">
+        <di:waypoint x="930" y="200" />
+        <di:waypoint x="990" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yi2ny7_di" bpmnElement="Flow_1yi2ny7">
+        <di:waypoint x="588" y="200" />
+        <di:waypoint x="650" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17j4sgi_di" bpmnElement="Flow_17j4sgi">
+        <di:waypoint x="1090" y="200" />
+        <di:waypoint x="1152" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_1lzs7pt_di" bpmnElement="Activity_19hasnr">
+        <dc:Bounds x="830" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ovnjck_di" bpmnElement="Activity_17m8mpf">
+        <dc:Bounds x="990" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1geixb9_di" bpmnElement="Event_1geixb9">
+        <dc:Bounds x="1152" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_1u08xa8_di" bpmnElement="DataStoreReference_1u08xa8">
+        <dc:Bounds x="1015" y="285" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1s67rkk_di" bpmnElement="Event_1s67rkk">
+        <dc:Bounds x="552" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1pecsrb_di" bpmnElement="Activity_1om8nr5">
+        <dc:Bounds x="650" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_0ycr4a2_di" bpmnElement="DataStoreReference_0ycr4a2">
+        <dc:Bounds x="675" y="285" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="DataInputAssociation_1s1dyhm_di" bpmnElement="DataInputAssociation_1s1dyhm">
+        <di:waypoint x="390" y="325" />
+        <di:waypoint x="390" y="283" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_1d6j4l0_di" bpmnElement="DataOutputAssociation_1d6j4l0">
+        <di:waypoint x="1040" y="240" />
+        <di:waypoint x="1040" y="285" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataInputAssociation_1fm5p42_di" bpmnElement="DataInputAssociation_1fm5p42">
+        <di:waypoint x="700" y="285" />
+        <di:waypoint x="700" y="240" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
