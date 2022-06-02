@@ -1,6 +1,11 @@
 {
   "components": [
     {
+      "text": "# Введите название фильма",
+      "type": "text",
+      "id": "Field_0i4mcwm"
+    },
+    {
       "label": "Название фильма",
       "type": "textfield",
       "id": "Field_1kpulvk",

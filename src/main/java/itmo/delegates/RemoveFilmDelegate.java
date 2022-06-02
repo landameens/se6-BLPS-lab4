@@ -2,10 +2,8 @@ package itmo.delegates;
 
 import itmo.services.PlaylistService;
 import lombok.RequiredArgsConstructor;
-import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.identity.User;
 
 import javax.inject.Named;
 
@@ -16,8 +14,8 @@ public class RemoveFilmDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        Long playlistId = (Long) execution.getVariable("playlist_id");
-        Long filmId = (Long) execution.getVariable("film_id");
+        Long playlistId = Long.parseLong((String) execution.getVariable("playlist_id"));
+        Long filmId = Long.parseLong((String) execution.getVariable("film_id"));
         playlistService.deleteFilm(playlistId, filmId);
     }
 }

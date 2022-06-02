@@ -81,9 +81,7 @@
     <bpmn:userTask id="Choose_playlist" name="выбор подборки" camunda:formRef="Form_choose_playlist" camunda:formRefBinding="latest">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="playlists">
-            <camunda:list />
-          </camunda:inputParameter>
+          <camunda:inputParameter name="playlists">${playlists}</camunda:inputParameter>
           <camunda:outputParameter name="is_removing">${is_removing}</camunda:outputParameter>
           <camunda:outputParameter name="playlist_id">${playlist_id}</camunda:outputParameter>
         </camunda:inputOutput>
@@ -93,10 +91,10 @@
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_1230fe8" sourceRef="Get_films_ativity" targetRef="Gateway_05jbkrl" />
     <bpmn:sequenceFlow id="Flow_06jri7l" name="да" sourceRef="Gateway_05jbkrl" targetRef="Activity_1oxf6v6">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_exist=="true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_exist==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_16plmsl" name="нет" sourceRef="Gateway_05jbkrl" targetRef="Choose_film">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_exist=="false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_exist==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0bo0y6f" sourceRef="Activity_1oxf6v6" targetRef="Get_playlist_activity" />
     <bpmn:exclusiveGateway id="Gateway_05jbkrl" name="есть ли такие фильмы">
@@ -108,10 +106,8 @@
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="film_name">${film_name}</camunda:inputParameter>
-          <camunda:outputParameter name="films">
-            <camunda:list />
-          </camunda:outputParameter>
-          <camunda:outputParameter name="is_exist" />
+          <camunda:outputParameter name="films">${films}</camunda:outputParameter>
+          <camunda:outputParameter name="is_exist">${is_exist}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1rdny88</bpmn:incoming>
@@ -126,9 +122,7 @@
     <bpmn:userTask id="Activity_1oxf6v6" name="выбрать фильм" camunda:formRef="Form_choose_film" camunda:formRefBinding="latest">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="films">
-            <camunda:list />
-          </camunda:inputParameter>
+          <camunda:inputParameter name="films">${films}</camunda:inputParameter>
           <camunda:outputParameter name="film_id">${film_id}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -138,9 +132,7 @@
     <bpmn:serviceTask id="Get_playlist_activity" name="найти подборки по пользователю" camunda:delegateExpression="${getPlaylistsDelegate}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="playlists">
-            <camunda:list />
-          </camunda:outputParameter>
+          <camunda:outputParameter name="playlists">${playlists}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0bo0y6f</bpmn:incoming>

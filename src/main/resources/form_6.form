@@ -1,9 +1,16 @@
 {
   "components": [
     {
-      "text": "# Text",
+      "text": "# Выберите плейлист для импорта",
       "type": "text",
-      "id": "Field_0y5qjlt"
+      "id": "Field_053ete0"
+    },
+    {
+      "type": "textfield",
+      "id": "Field_1p0d2nw",
+      "key": "alien_playlists",
+      "disabled": true,
+      "defaultValue": "${alien_playlists}"
     },
     {
       "label": "id плейлиста",

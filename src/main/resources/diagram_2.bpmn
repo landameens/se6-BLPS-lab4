@@ -18,9 +18,6 @@
         <bpmn:flowNodeRef>Event_03prg5j</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_175b586</bpmn:flowNodeRef>
       </bpmn:lane>
-      <bpmn:lane id="Lane_08922p2">
-        <bpmn:flowNodeRef>Activity_0fdlfko</bpmn:flowNodeRef>
-      </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0y3r92h</bpmn:outgoing>
@@ -49,28 +46,24 @@
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="playlist_name">${playlist_name}</camunda:inputParameter>
-          <camunda:outputParameter name="playlists">
-            <camunda:list />
-          </camunda:outputParameter>
-          <camunda:outputParameter name="is_exist" />
+          <camunda:outputParameter name="alien_playlists">${alien_playlists}</camunda:outputParameter>
+          <camunda:outputParameter name="is_exist">${is_exist}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1o108im</bpmn:incoming>
       <bpmn:outgoing>Flow_0e214ls</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_02qf374" name="нет" sourceRef="Gateway_0o89e0n" targetRef="Activity_0b23zbj">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_exist=="false"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_exist==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_09pb44k" name="да" sourceRef="Gateway_0o89e0n" targetRef="Activity_0ssm3dn">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_exist=="true"}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_exist==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="Activity_0ssm3dn" name="выбрать подборку" camunda:formRef="Form_choose_playlist_from" camunda:formRefBinding="latest">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="playlists">
-            <camunda:list />
-          </camunda:inputParameter>
-          <camunda:outputParameter name="playlist_id_from">${playlist_id_in}</camunda:outputParameter>
+          <camunda:inputParameter name="alien_playlists">${alien_playlists}</camunda:inputParameter>
+          <camunda:outputParameter name="playlist_id_from">${playlist_id_from}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_09pb44k</bpmn:incoming>
@@ -80,9 +73,7 @@
     <bpmn:userTask id="Activity_16z52c3" name="выбрать подборку" camunda:formRef="Form_choose_playlist_for_import" camunda:formRefBinding="latest">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="user_playlists">
-            <camunda:list />
-          </camunda:inputParameter>
+          <camunda:inputParameter name="playlists">${playlists}</camunda:inputParameter>
           <camunda:outputParameter name="playlist_id_to">${playlist_id_to}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
@@ -92,9 +83,7 @@
     <bpmn:serviceTask id="Activity_072d9mv" name="получить все подборки пользователя" camunda:delegateExpression="${getPlaylistsDelegate}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:outputParameter name="user_playlists">
-            <camunda:list />
-          </camunda:outputParameter>
+          <camunda:outputParameter name="playlists">${playlists}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1lpl13c</bpmn:incoming>
@@ -162,7 +151,7 @@
       <bpmn:dataStoreReference id="DataStoreReference_068j6jy" />
       <bpmn:dataStoreReference id="DataStoreReference_0fwmr50" />
       <bpmn:sequenceFlow id="Flow_182itdh" sourceRef="Activity_03vh731" targetRef="Activity_0ou2uvy" />
-      <bpmn:serviceTask id="Activity_0ou2uvy" name="отправить статистику импорта">
+      <bpmn:serviceTask id="Activity_0ou2uvy" name="отправить статистику импорта" camunda:delegateExpression="${sendStats}">
         <bpmn:incoming>Flow_182itdh</bpmn:incoming>
         <bpmn:outgoing>Flow_0kxhopb</bpmn:outgoing>
         <bpmn:dataOutputAssociation id="DataOutputAssociation_0w11ddr">
@@ -175,31 +164,17 @@
     <bpmn:endEvent id="Event_03prg5j">
       <bpmn:incoming>Flow_1eb3ene</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_0fdlfko" name="сохранить статистику импорта пользователя">
-      <bpmn:property id="Property_1li4bsq" name="__targetRef_placeholder" />
-      <bpmn:dataInputAssociation id="DataInputAssociation_0nj3w7u">
-        <bpmn:sourceRef>DataObjectReference_1j7tf9g</bpmn:sourceRef>
-        <bpmn:targetRef>Property_1li4bsq</bpmn:targetRef>
-      </bpmn:dataInputAssociation>
-      <bpmn:dataOutputAssociation id="DataOutputAssociation_18yvkjd">
-        <bpmn:targetRef>DataStoreReference_0rgdjn3</bpmn:targetRef>
-      </bpmn:dataOutputAssociation>
-    </bpmn:serviceTask>
-    <bpmn:dataStoreReference id="DataStoreReference_0rgdjn3" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1orr6z7">
       <bpmndi:BPMNShape id="Participant_1lvn8iv_di" bpmnElement="Participant_1lvn8iv" isHorizontal="true">
-        <dc:Bounds x="129" y="60" width="1631" height="800" />
+        <dc:Bounds x="129" y="60" width="1631" height="600" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_0gokap0_di" bpmnElement="Lane_0gokap0" isHorizontal="true">
         <dc:Bounds x="159" y="60" width="1601" height="250" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_0deuk99_di" bpmnElement="Lane_0deuk99" isHorizontal="true">
-        <dc:Bounds x="159" y="310" width="1601" height="330" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Lane_08922p2_di" bpmnElement="Lane_08922p2" isHorizontal="true">
-        <dc:Bounds x="159" y="640" width="1601" height="220" />
+        <dc:Bounds x="159" y="310" width="1601" height="350" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0y3r92h_di" bpmnElement="Flow_0y3r92h">
         <di:waypoint x="215" y="200" />
@@ -216,7 +191,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1eb3ene_di" bpmnElement="Flow_1eb3ene">
         <di:waypoint x="1620" y="470" />
-        <di:waypoint x="1642" y="470" />
+        <di:waypoint x="1662" y="470" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0e214ls_di" bpmnElement="Flow_0e214ls">
         <di:waypoint x="450" y="400" />
@@ -277,14 +252,7 @@
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_03prg5j_di" bpmnElement="Event_03prg5j">
-        <dc:Bounds x="1642" y="452" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ugcjna_di" bpmnElement="Activity_0fdlfko">
-        <dc:Bounds x="1420" y="660" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="DataStoreReference_0rgdjn3_di" bpmnElement="DataStoreReference_0rgdjn3">
-        <dc:Bounds x="1445" y="795" width="50" height="50" />
+        <dc:Bounds x="1662" y="452" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0nlncnl_di" bpmnElement="Activity_175b586" isExpanded="true">
         <dc:Bounds x="810" y="360" width="810" height="260" />
@@ -343,10 +311,6 @@
       <bpmndi:BPMNShape id="DataObjectReference_1j7tf9g_di" bpmnElement="DataObjectReference_1j7tf9g">
         <dc:Bounds x="1452" y="545" width="36" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="DataInputAssociation_0nj3w7u_di" bpmnElement="DataInputAssociation_0nj3w7u">
-        <di:waypoint x="1470" y="595" />
-        <di:waypoint x="1470" y="660" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="DataInputAssociation_0obyw2h_di" bpmnElement="DataInputAssociation_0obyw2h">
         <di:waypoint x="990" y="545" />
         <di:waypoint x="990" y="480" />
@@ -362,10 +326,6 @@
       <bpmndi:BPMNEdge id="DataOutputAssociation_1ftmw6g_di" bpmnElement="DataOutputAssociation_1ftmw6g">
         <di:waypoint x="1310" y="480" />
         <di:waypoint x="1310" y="545" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataOutputAssociation_18yvkjd_di" bpmnElement="DataOutputAssociation_18yvkjd">
-        <di:waypoint x="1472" y="740" />
-        <di:waypoint x="1474" y="795" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -1,9 +1,16 @@
 {
   "components": [
     {
-      "text": "# Text",
+      "text": "# Выберите нужные плейлист и действие",
       "type": "text",
-      "id": "Field_1hzzv5w"
+      "id": "Field_0fbm9hu"
+    },
+    {
+      "type": "textfield",
+      "id": "Field_0o19pot",
+      "key": "playlists",
+      "disabled": true,
+      "defaultValue": "${playlists}"
     },
     {
       "label": "id плейлиста",

@@ -7,6 +7,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import javax.inject.Named;
+import java.util.ArrayList;
 import java.util.List;
 
 @Named("importFilms")
@@ -16,7 +17,7 @@ public class ImportFilmsDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        List<Film> importedMovies = (List<Film>) execution.getVariable("imported_movies");
+        List<Film> importedMovies = (ArrayList<Film>) execution.getVariable("imported_movies");
         Long playlistIdTo = Long.parseLong((String) execution.getVariable("playlist_id_to"));
         playlistService.importPlaylist(playlistIdTo, importedMovies);
     }

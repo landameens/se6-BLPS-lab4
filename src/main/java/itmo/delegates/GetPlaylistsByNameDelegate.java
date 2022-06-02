@@ -17,7 +17,7 @@ public class GetPlaylistsByNameDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         List<Playlist> playlists = playlistService.findByNameContains((String) execution.getVariable("playlist_name"));
-        execution.setVariable("playlists", playlists);
+        execution.setVariable("alien_playlists", playlists.toString());
         execution.setVariable("is_exist", playlists.size() > 0);
     }
 }

@@ -8,7 +8,6 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 import javax.inject.Named;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Named("getAllImportedFilms")

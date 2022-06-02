@@ -17,7 +17,7 @@ public class GetFilmsDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         List<Film> films = filmService.findByNameContains((String) execution.getVariable("film_name"));
-        execution.setVariable("films", films);
+        execution.setVariable("films", films.toString());
         execution.setVariable("is_exist", films.size() > 0);
     }
 }

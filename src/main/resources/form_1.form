@@ -1,9 +1,17 @@
 {
   "components": [
     {
-      "text": "# Text\n",
+      "text": "# Выберите фильм для дальнейшего действия",
       "type": "text",
-      "id": "Field_0ahynkx"
+      "id": "Field_1mh2o2b"
+    },
+    {
+      "type": "textfield",
+      "id": "Field_18hymth",
+      "key": "films",
+      "disabled": true,
+      "defaultValue": "${films}",
+      "properties": {}
     },
     {
       "label": "id фильма",

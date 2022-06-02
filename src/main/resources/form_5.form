@@ -1,6 +1,11 @@
 {
   "components": [
     {
+      "text": "# Введите название плейлиста для импорта",
+      "type": "text",
+      "id": "Field_0kexbjg"
+    },
+    {
       "label": "Название плейлиста",
       "type": "textfield",
       "id": "Field_0eqsvz2",
@@ -13,7 +18,7 @@
     },
     {
       "action": "submit",
-      "label": "Button",
+      "label": "Поиск",
       "type": "button",
       "id": "Field_1ckfh4t",
       "key": "field_0kbfs0q"

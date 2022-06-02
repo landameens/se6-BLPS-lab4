@@ -1,9 +1,16 @@
 {
   "components": [
     {
-      "text": "# Text",
+      "text": "# Выберите в какой плейлист будет импорт",
       "type": "text",
-      "id": "Field_1n5n2zr"
+      "id": "Field_17t6y8x"
+    },
+    {
+      "type": "textfield",
+      "id": "Field_10c9vt7",
+      "key": "playlists",
+      "defaultValue": "${playlists}",
+      "disabled": true
     },
     {
       "label": "id плейлиста",
